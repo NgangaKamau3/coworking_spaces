@@ -9,19 +9,19 @@ if [ ! -f .env ]; then
 fi
 
 echo "🔧 Building production containers..."
-docker-compose -f docker-compose.prod.yml build --no-cache
+docker-compose build --no-cache
 
 echo "🗄️ Starting database and cache..."
-docker-compose -f docker-compose.prod.yml up -d db redis
+docker-compose up -d db redis
 
 echo "⏳ Waiting for database to be ready..."
 sleep 30
 
 echo "🔄 Running database migrations..."
-docker-compose -f docker-compose.prod.yml run --rm web python manage.py migrate
+docker-compose run --rm web python manage.py migrate
 
 echo "🚀 Starting all production services..."
-docker-compose -f docker-compose.prod.yml up -d
+docker-compose up -d
 
 echo "✅ Deployment complete!"
 echo "🌐 Platform: https://your-domain.com"
@@ -29,4 +29,4 @@ echo "📊 Health: https://your-domain.com/health/"
 echo "🔧 Admin: https://your-domain.com/admin/"
 
 echo "🔍 Service status:"
-docker-compose -f docker-compose.prod.yml ps
+docker-compose ps
