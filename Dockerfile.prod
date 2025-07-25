@@ -21,7 +21,6 @@ COPY . .
 
 # Set ownership and permissions
 RUN chown -R django:django /app
-RUN chmod +x wait-for-db.py
 
 # Collect static files
 RUN python manage.py collectstatic --noinput
