@@ -1,3 +1,4 @@
+import os
 import pytest
 from django.conf import settings
 from django.test.utils import get_runner
@@ -13,7 +14,7 @@ def pytest_configure():
             }
         },
         SITE_ID=1,
-        SECRET_KEY='test-secret-key',
+        SECRET_KEY=os.getenv('TEST_SECRET_KEY', 'secure-test-secret-key-32-chars-long'),
         USE_I18N=True,
         USE_L10N=True,
         STATIC_URL='/static/',
@@ -60,8 +61,8 @@ def pytest_configure():
         PASSWORD_HASHERS=[
             'django.contrib.auth.hashers.MD5PasswordHasher',
         ],
-        ENCRYPTION_KEY='test-encryption-key-32-characters',
-        IOT_WEBHOOK_SECRET='test-iot-secret',
+        ENCRYPTION_KEY=os.getenv('TEST_ENCRYPTION_KEY', 'secure-test-encryption-key-32-chars'),
+        IOT_WEBHOOK_SECRET=os.getenv('TEST_IOT_WEBHOOK_SECRET', 'secure-test-iot-webhook-secret'),
     )
 
     django.setup()
@@ -82,7 +83,7 @@ def user_factory():
         user = User.objects.create_user(
             username=email,
             email=email,
-            password='testpass123',
+            password=os.getenv('TEST_USER_PASSWORD', 'secure_test_pass_123'),
             **kwargs
         )
         UserProfile.objects.create(

@@ -1,3 +1,4 @@
+import os
 import pytest
 from django.test import TestCase
 from django.contrib.auth import get_user_model
@@ -15,7 +16,7 @@ class AuthenticationTestCase(TestCase):
         self.client = APIClient()
         self.user_data = {
             'email': 'test@example.com',
-            'password': 'testpass123',
+            'password': os.getenv('TEST_USER_PASSWORD', 'secure_test_pass_123'),
             'full_name': 'Test User',
             'user_type_code': 'Individual',
             'phone_number': '+1234567890'
@@ -100,7 +101,7 @@ class CompanyTestCase(TestCase):
         self.admin_user = User.objects.create_user(
             username='admin@company.com',
             email='admin@company.com',
-            password='adminpass123'
+            password=os.getenv('TEST_ADMIN_PASSWORD', 'secure_admin_pass_123')
         )
         UserProfile.objects.create(
             user=self.admin_user,

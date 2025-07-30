@@ -1,3 +1,4 @@
+import os
 import pytest
 from django.test import TestCase
 from django.contrib.auth import get_user_model
@@ -21,7 +22,7 @@ class BookingTestCase(TestCase):
         self.user = User.objects.create_user(
             username='user@example.com',
             email='user@example.com',
-            password='userpass123'
+            password=os.getenv('TEST_USER_PASSWORD', 'secure_test_pass_123')
         )
         UserProfile.objects.create(
             user=self.user,

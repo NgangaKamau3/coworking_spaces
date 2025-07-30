@@ -1,3 +1,4 @@
+import os
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -19,8 +20,8 @@ def api_root(request):
             "reviews": "/api/v1/reviews/",
             "health": "/health/"
         },
-        "documentation": {
-            "admin": "/admin/",
+        "documentation": {k: v for k, v in {
+            "admin": "/admin/" if os.getenv('DEBUG', 'False').lower() == 'true' else None,
             "oauth": "/o/"
-        }
+        }.items() if v is not None}
     })

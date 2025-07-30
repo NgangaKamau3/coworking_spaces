@@ -1,3 +1,4 @@
+import os
 import pytest
 import json
 from decimal import Decimal
@@ -21,7 +22,7 @@ class PaymentSecurityTestCase(APITestCase):
         self.user = User.objects.create_user(
             username='testuser',
             email='test@example.com',
-            password='testpass123'
+            password=os.getenv('TEST_USER_PASSWORD', 'secure_test_pass_123')
         )
         self.venue = Venue.objects.create(
             venue_name='Test Venue',
@@ -103,7 +104,7 @@ class PaymentSecurityTestCase(APITestCase):
         other_user = User.objects.create_user(
             username='otheruser',
             email='other@example.com',
-            password='testpass123'
+            password=os.getenv('TEST_USER_PASSWORD', 'secure_test_pass_123')
         )
         self.client.force_authenticate(user=other_user)
         
