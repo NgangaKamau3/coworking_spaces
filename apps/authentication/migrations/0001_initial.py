@@ -6,7 +6,7 @@ import django.contrib.auth.validators
 from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
-import uuid
+from uuid import uuid4
 
 
 class Migration(migrations.Migration):
@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
                 ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
                 ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
+                ('id', models.UUIDField(default=uuid4, editable=False, primary_key=True, serialize=False)),
                 ('email', models.EmailField(max_length=254, unique=True)),
                 ('phone_number', models.CharField(blank=True, max_length=20)),
                 ('is_deleted', models.BooleanField(default=False)),
@@ -47,7 +47,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='UserProfile',
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
+                ('id', models.UUIDField(default=uuid4, primary_key=True, serialize=False)),
                 ('full_name', models.CharField(max_length=255)),
                 ('user_type_code', models.CharField(choices=[('Individual', 'Individual'), ('CorporateAdmin', 'Corporate Admin'), ('CorporateUser', 'Corporate User'), ('PartnerAdmin', 'Partner Admin')], max_length=20)),
                 ('preferred_language', models.CharField(default='en', max_length=10)),
@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Company',
             fields=[
-                ('company_id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
+                ('company_id', models.UUIDField(default=uuid4, primary_key=True, serialize=False)),
                 ('company_name', models.CharField(max_length=255)),
                 ('subscription_plan_code', models.CharField(blank=True, choices=[('Basic', 'Basic'), ('Premium', 'Premium'), ('Enterprise', 'Enterprise')], max_length=20)),
                 ('billing_cycle_code', models.CharField(blank=True, choices=[('Monthly', 'Monthly'), ('Quarterly', 'Quarterly'), ('Annual', 'Annual')], max_length=20)),

@@ -1,5 +1,5 @@
-import os
-import environ
+from os import getenv, path
+from sys import argv
 from pathlib import Path
 
 env = environ.Env(DEBUG=(bool, False))
@@ -37,6 +37,7 @@ LOCAL_APPS = [
     'apps.iot',
     'apps.reviews',
     'apps.audit',
+    'apps.metrics',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -54,6 +55,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.audit.AuditMiddleware',
     'core.middleware.security.SecurityMiddleware',
+    'apps.metrics.collectors.metrics_middleware',
 ]
 
 ROOT_URLCONF = 'config.urls'

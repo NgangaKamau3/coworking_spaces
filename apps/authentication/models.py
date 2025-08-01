@@ -1,4 +1,4 @@
-import uuid
+from uuid import uuid4
 from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db import models
 

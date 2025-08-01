@@ -1,0 +1,15 @@
+# Enterprise dependencies for production deployment
+dependency-injector==4.41.0
+prometheus-client==0.17.1
+opentelemetry-api==1.20.0
+opentelemetry-sdk==1.20.0
+opentelemetry-instrumentation-django==0.41b0
+opentelemetry-instrumentation-psycopg2==0.41b0
+opentelemetry-exporter-jaeger==1.20.0
+gunicorn==21.2.0
+uvicorn[standard]==0.23.2
+redis==5.0.1
+django-redis==5.4.0
+celery[redis]==5.3.4
+psycopg2-binary==2.9.9
+sentry-sdk[django]==1.38.0

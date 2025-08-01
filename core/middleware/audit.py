@@ -1,5 +1,5 @@
 import json
-import uuid
+from uuid import uuid4
 from django.utils.deprecation import MiddlewareMixin
 from apps.audit.models import UserActivityLog
 

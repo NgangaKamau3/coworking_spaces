@@ -1,11 +1,11 @@
 from cryptography.fernet import Fernet
 from django.conf import settings
-import base64
+from base64 import urlsafe_b64encode
 
 class FieldEncryption:
     def __init__(self):
         key = settings.ENCRYPTION_KEY.encode()
-        self.cipher = Fernet(base64.urlsafe_b64encode(key[:32]))
+        self.cipher = Fernet(urlsafe_b64encode(key[:32]))
     
     def encrypt(self, data: str) -> str:
         if not data:

@@ -22,19 +22,23 @@ class AuthenticationTestCase(TestCase):
             'phone_number': '+1234567890'
         }
     
-    def test_user_registration_success(self):
-        """Test successful user registration"""
-        response = self.client.post('/api/v1/auth/register/', self.user_data)
+    @pytest.mark.parametrize('user_type', ['Individual', 'CorporateAdmin', 'CorporateUser', 'PartnerAdmin'])
+    def test_user_registration_success(self, user_type):
+        """Test successful user registration for different user types"""
+        test_data = self.user_data.copy()
+        test_data['user_type_code'] = user_type
+        
+        response = self.client.post('/api/v1/auth/register/', test_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
         # Verify user created
-        user = User.objects.get(email=self.user_data['email'])
-        self.assertTrue(user.check_password(self.user_data['password']))
+        user = User.objects.get(email=test_data['email'])
+        self.assertTrue(user.check_password(test_data['password']))
         
         # Verify profile created
         profile = UserProfile.objects.get(user=user)
-        self.assertEqual(profile.full_name, self.user_data['full_name'])
-        self.assertEqual(profile.user_type_code, self.user_data['user_type_code'])
+        self.assertEqual(profile.full_name, test_data['full_name'])
+        self.assertEqual(profile.user_type_code, user_type)
     
     def test_user_registration_duplicate_email(self):
         """Test registration with duplicate email"""
@@ -96,6 +100,12 @@ class AuthenticationTestCase(TestCase):
 class CompanyTestCase(TestCase):
     """Test company management"""
     
+    COMPANY_DATA = {
+        'company_name': 'Test Company',
+        'subscription_plan_code': 'Premium',
+        'billing_cycle_code': 'Monthly'
+    }
+    
     def setUp(self):
         self.client = APIClient()
         self.admin_user = User.objects.create_user(
@@ -112,22 +122,17 @@ class CompanyTestCase(TestCase):
     
     def test_company_creation(self):
         """Test company creation by corporate admin"""
-        company_data = {
-            'company_name': 'Test Company',
-            'subscription_plan_code': 'Premium',
-            'billing_cycle_code': 'Monthly'
-        }
-        response = self.client.post('/api/v1/auth/companies/', company_data)
+        response = self.client.post('/api/v1/auth/companies/', self.COMPANY_DATA)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
         # Verify company created
-        company = Company.objects.get(company_name='Test Company')
+        company = Company.objects.get(company_name=self.COMPANY_DATA['company_name'])
         self.assertEqual(company.created_by_user, self.admin_user)
     
     def test_company_list(self):
         """Test company listing"""
         Company.objects.create(
-            company_name='Test Company',
+            company_name=self.COMPANY_DATA['company_name'],
             created_by_user=self.admin_user
         )
         
