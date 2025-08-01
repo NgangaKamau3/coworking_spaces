@@ -7,7 +7,7 @@ class AuditMiddleware(MiddlewareMixin):
     """Middleware for audit trail logging"""
     
     def process_request(self, request):
-        request.audit_id = str(uuid.uuid4())
+        request.audit_id = str(uuid4())
         return None
     
     def process_response(self, request, response):
