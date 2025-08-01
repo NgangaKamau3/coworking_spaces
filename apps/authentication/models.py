@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db import models
 
 class User(AbstractUser):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=20, blank=True)
     is_deleted = models.BooleanField(default=False)
@@ -28,7 +28,7 @@ class UserProfile(models.Model):
         ('Deleted', 'Deleted'),
     ]
     
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid4)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     full_name = models.CharField(max_length=255)
     user_type_code = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)
@@ -57,7 +57,7 @@ class Company(models.Model):
         ('Annual', 'Annual'),
     ]
     
-    company_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    company_id = models.UUIDField(primary_key=True, default=uuid4)
     company_name = models.CharField(max_length=255)
     subscription_plan_code = models.CharField(max_length=20, choices=SUBSCRIPTION_PLANS, blank=True)
     billing_cycle_code = models.CharField(max_length=20, choices=BILLING_CYCLES, blank=True)
