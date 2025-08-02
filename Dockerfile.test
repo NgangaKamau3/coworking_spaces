@@ -1,0 +1,28 @@
+FROM python:3.9-slim
+
+# Install system dependencies for PostGIS and GDAL
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    gdal-bin \
+    libgdal-dev \
+    libpq-dev \
+    gcc \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV GDAL_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgdal.so
+
+WORKDIR /app
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy project
+COPY . .
+
+# Run tests
+CMD ["pytest", "-v", "--tb=short"]

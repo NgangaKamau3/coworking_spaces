@@ -1,0 +1,48 @@
+services:
+  test-db:
+    image: postgis/postgis:15-3.3
+    environment:
+      POSTGRES_DB: test_cwspaces
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_pass
+    ports:
+      - "5433:5432"
+    volumes:
+      - test_db_data:/var/lib/postgresql/data
+
+  test-redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+
+  test-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=test-secret-key-for-testing
+      - DB_NAME=test_cwspaces
+      - DB_USER=test_user
+      - DB_PASSWORD=test_pass
+      - DB_HOST=test-db
+      - DB_PORT=5432
+      - REDIS_URL=redis://test-redis:6379/0
+      - ENCRYPTION_KEY=test-encryption-key-32-chars-long
+      - IOT_WEBHOOK_SECRET=test-iot-secret
+      - DJANGO_SETTINGS_MODULE=config.settings
+    depends_on:
+      - test-db
+      - test-redis
+    volumes:
+      - .:/app
+      - test_coverage:/app/htmlcov
+    command: >
+      sh -c "
+        python manage.py migrate &&
+        pytest tests/test_enterprise_global.py tests/test_authentication.py tests/test_venues.py tests/test_bookings.py tests/test_payments.py -v --tb=short --cov=apps --cov-report=html --cov-report=term --cov-fail-under=60
+      "
+
+volumes:
+  test_db_data:
+  test_coverage:

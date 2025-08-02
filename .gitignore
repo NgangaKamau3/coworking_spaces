@@ -172,3 +172,27 @@ docker-compose.override.yml
 
 # Kubernetes
 *.kubeconfig
+
+# Local testing files
+test_runner.py
+tests/test_core_functionality.py
+tests/test_enterprise_suite.py
+tests/test_settings.py
+test_local_*.py
+test_dev_*.py
+run_tests_local.*
+test_local_runner.py
+
+# Local documentation (development only)
+README_TESTING.md
+README_DEPLOYMENT.md
+README_DEVELOPMENT.md
+DOCS_LOCAL.md
+TESTING_GUIDE.md
+
+# Coverage reports
+htmlcov/
+.coverage
+coverage.xml
+*.cover
+.pytest_cache/
